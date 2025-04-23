@@ -101,26 +101,40 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-	  if(!(GPIOB->IDR & (1<<9))){
-		  HAL_Delay(100);
-		  check;
-		  change_leds(2);
-		  		  }
-
+	  if(!(GPIOB->IDR & (1<<6))){
+	  	while (!(GPIOB->IDR & (1 << 6)));
+	  	HAL_Delay(100);
+	  	collect_password('1');
+	  	check;
+	  }
 	  if(!(GPIOB->IDR & (1<<7))){
+	  	while (!(GPIOB->IDR & (1 << 7)));
+	  	HAL_Delay(100);
+	  	collect_password('2');
+	  	check;
+	  }
+	  if(!(GPIOB->IDR & (1<<8))){
+	  	while (!(GPIOB->IDR & (1 << 8)));
+	  	HAL_Delay(100);
+	  	collect_password('3');
+	  	check;
+	  }
+	  if(!(GPIOB->IDR & (1<<9))){
+	  	while (!(GPIOB->IDR & (1 << 9)));
+	  	HAL_Delay(100);
+	  	check;
+	  	send_password();
+	  }
 
-			  check;HAL_Delay(1000);
-			  char msg[] = "blink2";
-			  //HAL_UART_Transmit_IT(&huart1, (uint8_t*)msg, sizeof(msg));
-			  	  	send(msg);
-	  		  }
+	  		  		  }
+
 
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
-}
+
 
 /**
   * @brief System Clock Configuration
@@ -358,6 +372,58 @@ void send(data) {
 	int size = strlen(data);
 	HAL_UART_Transmit_IT(&huart1, (uint8_t*)data, (uint16_t*)size);
 	check;
+}
+uint8_t password[]="000";
+void collect_password(uint8_t num){
+	if(password[0]=='0'){
+		password[0]=num;
+	}else{
+		if(password[1]=='0'){
+			password[1]=num;
+			}else{
+				if(password[2]=='0'){
+						password[2]=num;
+					}
+			}
+	}
+
+}
+/*
+uint8_t password[3];
+int index = 0;
+void collect_password(uint8_t num){
+	if(index == 0){
+		password[0]=num;
+		index = 1;
+	}else{
+		if(index == 1){
+			password[1]=num;
+			index = 2;
+			}else{
+				if(index == 2){
+						password[2]=num;
+						index = 0;
+					}
+			}
+	}
+
+}*/
+
+void send_password(){
+	if(password[2]!='0'){
+		uint8_t data[6];
+		/*for (int i=0; i<3; i++){
+			data[i]=password[i];
+		}*/
+		 data[0] = password[0];
+		 data[1] = password[1];
+		 data[2] = password[2];
+		HAL_UART_Transmit_IT(&huart1, data, 3);
+		for(int i=0; i<3; i++){
+			password[i]='0';
+		}
+	check;
+	}
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
