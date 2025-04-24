@@ -45,7 +45,8 @@ TIM_HandleTypeDef htim2;
 UART_HandleTypeDef huart1;
 
 /* USER CODE BEGIN PV */
-char rx_data[6];
+char rx_data[4];
+int flag = 0;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -101,6 +102,10 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(flag == 0){
+		  off();
+	  }
+
 	  if(!(GPIOB->IDR & (1<<6))){
 	  	while (!(GPIOB->IDR & (1 << 6)));
 	  	HAL_Delay(100);
@@ -338,92 +343,80 @@ static void MX_GPIO_Init(void)
 /* USER CODE BEGIN 4 */
 void change_leds(int times){
 	for(int i = 0; i < times; i++){
-		GPIOB -> ODR ^= (1<<12);
-		GPIOA -> ODR ^= (1<<0);
-		GPIOB -> ODR ^= (1<<13);
-		GPIOA -> ODR ^= (1<<1);
-		GPIOB -> ODR ^= (1<<14);
-		GPIOA -> ODR ^= (1<<2);
-		GPIOB -> ODR ^= (1<<15);
-		GPIOA -> ODR ^= (1<<3);
-		GPIOA -> ODR ^= (1<<8);
-		GPIOA -> ODR ^= (1<<4);
-		GPIOA -> ODR ^= (1<<5);
-		GPIOA -> ODR ^= (1<<6);
-		GPIOA -> ODR ^= (1<<11);
-		GPIOA -> ODR ^= (1<<7);
-		GPIOA -> ODR ^= (1<<12);
-		GPIOB -> ODR ^= (1<<0);
-		GPIOA -> ODR ^= (1<<13);
-		GPIOB -> ODR ^= (1<<1);
-		GPIOA -> ODR ^= (1<<14);
-		GPIOB -> ODR ^= (1<<10);
-		GPIOA -> ODR ^= (1<<15);
-		GPIOB -> ODR ^= (1<<11);
-		GPIOB -> ODR ^= (1<<3);
-		GPIOB -> ODR ^= (1<<4);
-		GPIOB -> ODR ^= (1<<5);
+		GPIOB->ODR ^= (1 << 12);  GPIOA->ODR ^= (1 << 0);   GPIOB->ODR ^= (1 << 13);  GPIOA->ODR ^= (1 << 1);
+		GPIOB->ODR ^= (1 << 14);  GPIOA->ODR ^= (1 << 2);   GPIOB->ODR ^= (1 << 15);  GPIOA->ODR ^= (1 << 3);
+		GPIOA->ODR ^= (1 << 8);   GPIOA->ODR ^= (1 << 4);   GPIOA->ODR ^= (1 << 5);   GPIOA->ODR ^= (1 << 6);
+		GPIOA->ODR ^= (1 << 11);  GPIOA->ODR ^= (1 << 7);   GPIOA->ODR ^= (1 << 12);  GPIOB->ODR ^= (1 << 0);
+		GPIOA->ODR ^= (1 << 13);  GPIOB->ODR ^= (1 << 1);   GPIOA->ODR ^= (1 << 14);  GPIOB->ODR ^= (1 << 10);
+		GPIOA->ODR ^= (1 << 15);  GPIOB->ODR ^= (1 << 11);  GPIOB->ODR ^= (1 << 3);   GPIOB->ODR ^= (1 << 4);
+		GPIOB->ODR ^= (1 << 5);
 	}
 }
-
+void on(){
+	GPIOB->ODR &= ~(1 << 12);  GPIOA->ODR &= ~(1 << 0);   GPIOB->ODR &= ~(1 << 13);  GPIOA->ODR &= ~(1 << 1);
+	GPIOB->ODR &= ~(1 << 14);  GPIOA->ODR &= ~(1 << 2);   GPIOB->ODR &= ~(1 << 15);  GPIOA->ODR &= ~(1 << 3);
+	GPIOA->ODR &= ~(1 << 8);   GPIOA->ODR &= ~(1 << 4);   GPIOA->ODR &= ~(1 << 5);   GPIOA->ODR &= ~(1 << 6);
+	GPIOA->ODR &= ~(1 << 11);  GPIOA->ODR &= ~(1 << 7);   GPIOA->ODR &= ~(1 << 12);  GPIOB->ODR &= ~(1 << 0);
+	GPIOA->ODR &= ~(1 << 13);  GPIOB->ODR &= ~(1 << 1);   GPIOA->ODR &= ~(1 << 14);  GPIOB->ODR &= ~(1 << 10);
+	GPIOA->ODR &= ~(1 << 15);  GPIOB->ODR &= ~(1 << 11);  GPIOB->ODR &= ~(1 << 3);   GPIOB->ODR &= ~(1 << 4);
+	GPIOB->ODR &= ~(1 << 5);
+}
+void off(){
+	GPIOB->ODR |= (1 << 12);  GPIOA->ODR |= (1 << 0);   GPIOB->ODR |= (1 << 13);  GPIOA->ODR |= (1 << 1);
+	GPIOB->ODR |= (1 << 14);  GPIOA->ODR |= (1 << 2);   GPIOB->ODR |= (1 << 15);  GPIOA->ODR |= (1 << 3);
+	GPIOA->ODR |= (1 << 8);   GPIOA->ODR |= (1 << 4);   GPIOA->ODR |= (1 << 5);   GPIOA->ODR |= (1 << 6);
+	GPIOA->ODR |= (1 << 11);  GPIOA->ODR |= (1 << 7);   GPIOA->ODR |= (1 << 12);  GPIOB->ODR |= (1 << 0);
+	GPIOA->ODR |= (1 << 13);  GPIOB->ODR |= (1 << 1);   GPIOA->ODR |= (1 << 14);  GPIOB->ODR |= (1 << 10);
+	GPIOA->ODR |= (1 << 15);  GPIOB->ODR |= (1 << 11);  GPIOB->ODR |= (1 << 3);   GPIOB->ODR |= (1 << 4);
+	GPIOB->ODR |= (1 << 5);
+}
 
 
 void send(data) {
-	int size = strlen(data);
+	int size = sizeof(data);
 	HAL_UART_Transmit_IT(&huart1, (uint8_t*)data, (uint16_t*)size);
 	check;
 }
-uint8_t password[]="000";
-void collect_password(uint8_t num){
-	if(password[0]=='0'){
-		password[0]=num;
-	}else{
-		if(password[1]=='0'){
-			password[1]=num;
-			}else{
-				if(password[2]=='0'){
-						password[2]=num;
-					}
-			}
-	}
-
+char password[]="0000";
+void collect_password(uint8_t num) {
+    if (password[0] == '0') {
+        password[0] = num;
+    } else {
+        if (password[1] == '0') {
+            password[1] = num;
+        } else {
+            if (password[2] == '0') {
+                password[2] = num;
+            } else {
+                if (password[3] == '0') {
+                    password[3] = num;
+                }
+            }
+        }
+    }
 }
-/*
-uint8_t password[3];
-int index = 0;
-void collect_password(uint8_t num){
-	if(index == 0){
-		password[0]=num;
-		index = 1;
-	}else{
-		if(index == 1){
-			password[1]=num;
-			index = 2;
-			}else{
-				if(index == 2){
-						password[2]=num;
-						index = 0;
-					}
-			}
-	}
-
-}*/
 
 void send_password(){
-	if(password[2]!='0'){
-		uint8_t data[6];
-		/*for (int i=0; i<3; i++){
-			data[i]=password[i];
-		}*/
-		 data[0] = password[0];
-		 data[1] = password[1];
-		 data[2] = password[2];
-		HAL_UART_Transmit_IT(&huart1, data, 3);
-		for(int i=0; i<3; i++){
-			password[i]='0';
-		}
-	check;
-	}
+    if(password[3] != '0'){
+        send(password);
+        check;
+    }
+}
+
+void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart)
+{
+    if (huart->Instance == USART1) {
+        for(int i = 0; i < sizeof(password); i++) {
+            password[i] = '0';
+        }
+    }
+}
+void control_leds(){
+	flag = 1;
+	on();
+	while (GPIOB->IDR & (1 << 9));
+	while (!GPIOB->IDR & (1 << 9));
+	flag = 0;
 }
 
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
@@ -432,22 +425,18 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     {
     	//char itog[]={'q','w','e','r','t','y'}; - работает
     	//char itog[]="qwerty"; - тоже работает
-    	if (memcmp("blink2", rx_data, sizeof(rx_data)) == 0)
+    	if (memcmp("2132", rx_data, sizeof(rx_data)) == 0)
     	{
-    		check;
-    		change_leds(1);
-            }
-    	// очистка
+
     	for(int i = 0; i<sizeof(rx_data); i++){
     		rx_data[i]='0';
     	}
-
         // Перезапускаем приёма
         HAL_UART_Receive_IT(&huart1, (uint8_t*)rx_data, sizeof(rx_data));
-
+        control_leds();
     }
 }
-
+}
 /* USER CODE END 4 */
 
 /**
